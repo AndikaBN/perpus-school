@@ -12,12 +12,12 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @include('alert.alert-info')
-                    <br/>
+                    <br />
 
                     <div class="max-w-sm mx-auto">
                         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg text-center">
-                            <img src="https://www.svgrepo.com/show/513520/book-closed.svg"
-                                class="mx-auto h-24 w-24" alt="Pinjam Buku">
+                            <img src="https://www.svgrepo.com/show/513520/book-closed.svg" class="mx-auto h-24 w-24"
+                                alt="Pinjam Buku">
                             <div class="px-6 py-4">
                                 <div class="font-bold text-xl mb-2">Perpustakaan Sekolah</div>
                                 <p class="dark:text-gray-100 text-base">
@@ -25,22 +25,42 @@
                                 </p>
                             </div>
                             <div class="px-6 pt-4 pb-2">
-                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                <span
+                                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                     <a href="{{ route('buku.userBooks') }}">Semua Buku</a>
                                 </span>
-                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                <span
+                                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                     <a href="{{ route('peminjaman-buku.index') }}">Peminjaman Buku</a>
                                 </span>
-                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                <span
+                                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                     <a href="{{ route('pengembalian-buku.index') }}">Pengembalian Buku</a>
                                 </span>
-                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                <span
+                                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                     <a href="{{ route('profile.edit') }}">Ubah Profile</a>
                                 </span>
                             </div>
 
                         </div>
                     </div>
+
+                    @if (!empty($recommendedBooks))
+                        <div class="mt-6 px-6">
+                            <h3 class="text-lg font-semibold mb-4">Rekomendasi Buku Untuk Kamu:</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                @foreach ($recommendedBooks as $book)
+                                    <div class="p-4 bg-gray-200 rounded-lg shadow-md">
+                                        <h4 class="font-semibold">{{ $book->nama_buku }}</h4>
+                                        <p class="text-sm text-gray-600">{{ $book->penulis }}</p>
+                                        <p class="text-sm text-gray-600">{{ $book->tahun_rilis }}</p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>

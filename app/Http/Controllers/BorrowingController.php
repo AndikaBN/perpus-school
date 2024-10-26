@@ -48,6 +48,26 @@ class BorrowingController extends Controller
         return view('borrowing.index', compact('peminjaman'));
     }
 
+    public function collaborativeFiltering(){
+        $users = User::all();
+        $buku = Buku::all();
+
+        $recommendedBooks = [];
+        if (auth()->user()->peminjaman->count() > 0) {
+            $borrowedBookIds = auth()->user()->peminjaman->pluck('buku_id')->toArray();
+
+            // Ambil ID buku yang sering dipinjam bersamaan dengan buku yang sudah dipinjam user
+            $recommendedBooks = Buku::whereHas('peminjaman', function ($query) use ($borrowedBookIds) {
+                $query->whereIn('buku_id', $borrowedBookIds);
+            })->whereNotIn('id', $borrowedBookIds) // Exclude already borrowed books
+                ->distinct()
+                ->pluck('id') // Ambil hanya ID buku sebagai array
+                ->toArray();
+        }
+
+        return view('borrowing.collaborativeFiltering', compact('users', 'buku', 'recommendedBooks'));
+    }
+
 
     /**
      * Show the form for creating a new resource.
