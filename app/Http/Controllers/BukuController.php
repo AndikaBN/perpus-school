@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
@@ -46,6 +47,7 @@ class BukuController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
     public function create()
     {
         return view('book.create');

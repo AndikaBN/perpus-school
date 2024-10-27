@@ -60,9 +60,6 @@
                     @else
                         <p class="text-center text-gray-500"></p>
                     @endif
-
-
-
                 </div>
             </div>
         </div>

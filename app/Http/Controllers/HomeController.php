@@ -7,10 +7,13 @@ use App\Models\Setting;
 
 class HomeController extends Controller
 {
-public function index()
- {
-    $settings = Setting::first();
-    return view('dashboard', compact('settings'));
+    public function index()
+    {
 
-}
+        if (auth()->user()->role === 'siswa') {
+            return redirect()->route('borrowing.collaborativeFiltering');
+        }
+        $settings = Setting::first();
+        return view('dashboard', compact('settings'));
+    }
 }

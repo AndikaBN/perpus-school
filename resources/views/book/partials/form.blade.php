@@ -3,8 +3,7 @@
 
     <div class="mb-4">
         <x-input-label for="book_title">{{ __('Judul Buku') }}</x-input-label>
-        <x-text-input id="book_title" class="mt-1 block w-full" type="text" name="book_title"
-            value="{{ old('book_title') }}" required />
+        <x-text-input id="book_title" class="mt-1 block w-full" type="text" name="book_title" value="{{ old('book_title') }}" required />
         @error('book_title')
             <x-input-error-set :message="$message" class="mt-2" />
         @enderror
@@ -12,8 +11,7 @@
 
     <div class="mb-4">
         <x-input-label for="author">{{ __('Nama Pengarang') }}</x-input-label>
-        <x-text-input id="author" class="mt-1 block w-full" type="text" name="author" value="{{ old('author') }}"
-            required />
+        <x-text-input id="author" class="mt-1 block w-full" type="text" name="author" value="{{ old('author') }}" required />
         @error('author')
             <x-input-error-set :message="$message" class="mt-2" />
         @enderror
@@ -21,8 +19,7 @@
 
     <div class="mb-4">
         <x-input-label for="release_year">{{ __('Tahun Rilis') }}</x-input-label>
-        <x-text-input id="release_year" class="mt-1 block w-full" type="number" name="release_year"
-            value="{{ old('release_year') }}" required />
+        <x-text-input id="release_year" class="mt-1 block w-full" type="number" name="release_year" value="{{ old('release_year') }}" required />
         @error('release_year')
             <x-input-error-set :message="$message" class="mt-2" />
         @enderror

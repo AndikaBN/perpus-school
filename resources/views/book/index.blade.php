@@ -12,7 +12,6 @@
 
             <div class="p-4 sm:p-6 dark:bg-gray-900 border-b border-gray-200">
 
-
                 <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-4">
                     <x-secondary-button href="{{ route('buku.create') }}">
                         Tambah

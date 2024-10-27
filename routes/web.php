@@ -29,8 +29,6 @@ Route::get('/', function () {
 Route::get('/dashboard', [HomeController::class, 'index']
 )->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard', [BorrowingController::class, 'collaborativeFiltering'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
 
     //user-books
@@ -62,10 +60,9 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::put('/peminjaman-buku/{id}', [BorrowingController::class, 'update'])->name('peminjaman-buku.update');
     Route::delete('/peminjaman-buku/{id}', [BorrowingController::class, 'destroy'])->name('peminjaman-buku.destroy');
 
-
     Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
     Route::post('/buku', [BukuController::class, 'store'])->name('buku.store');
-    Route::get('/buku/create', [BukuController::class, 'create'])->name('buku.create');
+    Route::get('/bukus/create', [BukuController::class, 'create'])->name('buku.create');
     Route::get('/buku/{id}/edit', [BukuController::class, 'edit'])->name('buku.edit');
     Route::get('/buku/{id}', [BukuController::class, 'show'])->name('buku.show');
     Route::put('/buku/{id}', [BukuController::class, 'update'])->name('buku.update');
