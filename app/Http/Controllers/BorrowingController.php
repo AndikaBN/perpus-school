@@ -45,29 +45,43 @@ class BorrowingController extends Controller
 
         $peminjaman = $peminjaman->paginate(10);
 
-        return view('borrowing.index', compact('peminjaman'));
-    }
-
-    public function collaborativeFiltering(){
-        $users = User::all();
-        $buku = Buku::all();
-
         $recommendedBooks = [];
         if (auth()->user()->peminjaman->count() > 0) {
             $borrowedBookIds = auth()->user()->peminjaman->pluck('buku_id')->toArray();
 
-            // Ambil ID buku yang sering dipinjam bersamaan dengan buku yang sudah dipinjam user
             $recommendedBooks = Buku::whereHas('peminjaman', function ($query) use ($borrowedBookIds) {
                 $query->whereIn('buku_id', $borrowedBookIds);
-            })->whereNotIn('id', $borrowedBookIds) // Exclude already borrowed books
+            })
+                ->whereNotIn('id', $borrowedBookIds)
                 ->distinct()
-                ->pluck('id') // Ambil hanya ID buku sebagai array
-                ->toArray();
+                ->get();
         }
 
-        return view('borrowing.collaborativeFiltering', compact('users', 'buku', 'recommendedBooks'));
+        return view('borrowing.index', compact('peminjaman', 'settings', 'recommendedBooks'));
     }
 
+    public function collaborativeFiltering() {
+        $users = User::all();
+        $buku = Buku::all();
+        $settings = Setting::first();
+    
+        $recommendedBooks = collect();
+    
+        if (auth()->user()->peminjaman->count() > 0) {
+            $borrowedBookIds = auth()->user()->peminjaman->pluck('buku_id')->unique()->toArray();
+    
+            $recommendedBooks = Buku::whereHas('peminjaman', function ($query) use ($borrowedBookIds) {
+                $query->whereIn('buku_id', $borrowedBookIds)
+                      ->where('user_id', '!=', auth()->user()->id);
+            })
+            ->get();
+            // dd($recommendedBooks);
+            
+        }
+    
+        return view('dashboard', compact('users', 'buku', 'recommendedBooks', 'settings'));
+    }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -81,12 +95,14 @@ class BorrowingController extends Controller
         if (auth()->user()->peminjaman->count() > 0) {
             $borrowedBookIds = auth()->user()->peminjaman->pluck('buku_id')->toArray();
 
-            // Ambil ID buku yang sering dipinjam bersamaan dengan buku yang sudah dipinjam user
             $recommendedBooks = Buku::whereHas('peminjaman', function ($query) use ($borrowedBookIds) {
                 $query->whereIn('buku_id', $borrowedBookIds);
-            })->whereNotIn('id', $borrowedBookIds) // Exclude already borrowed books
+            })
+                ->whereNotIn('id', $borrowedBookIds)
+                ->withCount(['peminjaman'])
+                ->orderBy('peminjaman_count', 'desc') // Urutkan berdasarkan jumlah peminjaman untuk relev
                 ->distinct()
-                ->pluck('id') // Ambil hanya ID buku sebagai array
+                ->pluck('id')
                 ->toArray();
         }
 

@@ -29,18 +29,20 @@ Route::get('/', function () {
 Route::get('/dashboard', [HomeController::class, 'index']
 )->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/dashboard', [BorrowingController::class, 'collaborativeFiltering'])->name('dashboard');
+
 Route::middleware('auth')->group(function () {
 
     //user-books
     Route::get('/user-books', [BukuController::class, 'userBooks'])->name('buku.userBooks');
     // show book
-    Route::get('/buku/detail/{id}', [BukuController::class, 'show'])->name('buku.show');
+    Route::get('/buku/{id}', [BukuController::class, 'show'])->name('buku.show');
 
     Route::get('/peminjaman-buku', [BorrowingController::class, 'index'])->name('peminjaman-buku.index');
     Route::get('/peminjaman-buku/create', [BorrowingController::class, 'create'])->name('peminjaman-buku.create');
     Route::get('/peminjaman-buku/{id}', [BorrowingController::class, 'show'])->name('peminjaman-buku.show');
     Route::post('/peminjaman-buku', [BorrowingController::class, 'store'])->name('peminjaman-buku.store');
-    Route::get('/collaborative-filtering', [BorrowingController::class, 'collaborativeFiltering'])->name('collaborative-filtering');
+    Route::get('/collaborative-filtering', [BorrowingController::class, 'collaborativeFiltering'])->name('collaborative.filtering');
 
     Route::get('/pengembalian-buku', [ReturnbookController::class, 'index'])->name('pengembalian-buku.index');
     Route::get('/pengembalian-buku/create', [ReturnbookController::class, 'create'])->name('pengembalian-buku.create');
