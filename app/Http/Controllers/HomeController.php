@@ -11,7 +11,7 @@ class HomeController extends Controller
     {
 
         if (auth()->user()->role === 'siswa') {
-            return redirect()->route('borrowing.collaborativeFiltering');
+            return redirect()->route('collaborative.filtering');
         }
         $settings = Setting::first();
         return view('dashboard', compact('settings'));
