@@ -28,21 +28,33 @@ class BukuController extends Controller
         return view('book.index', compact('settings', 'buku'));
     }
 
+    // public function search(Request $request)
+    // {
+    //     $search = $request->get('search');
+    //     $books = Buku::where('nama_buku', 'LIKE', "%{$search}%")
+    //         ->orWhere('penulis', 'LIKE', "%{$search}%")
+    //         ->get();
+
+    //     return response()->json($books);
+    // }
+
     // user-books
     public function userBooks(Request $request)
     {
         $settings = Setting::first();
-        $buku = Buku::query();
+        $bukuQuery = Buku::query();
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-            $buku->where('nama_buku', 'like', '%' . $searchTerm . '%');
+            $bukuQuery->where('nama_buku', 'like', '%' . $searchTerm . '%');
         }
 
-        $buku = $buku->get();
+        // Hanya ambil data sekali, tanpa paginasi atau duplikasi
+        $buku = $bukuQuery->paginate(10);
 
         return view('book.user-books', compact('settings', 'buku'));
     }
+
 
     /**
      * Show the form for creating a new resource.

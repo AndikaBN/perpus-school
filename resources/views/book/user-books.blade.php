@@ -6,64 +6,48 @@
         </h2>
     </x-slot>
 
-    <div class="py-6 px-4 sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
+    <div style="padding: 1.5rem;">
+        <div style="background-color: white; border-radius: 0.375rem; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">
             @include('alert.alert-info')
 
-            <div class="p-6 dark:bg-gray-900 border-b border-gray-200">
-                <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                    <form action="{{ route('buku.userBooks') }}" method="GET"
-                        class="flex flex-col sm:flex-row items-center mt-4 sm:mt-0 space-y-2 sm:space-y-0 sm:space-x-4">
-                        <input type="text" name="search" placeholder="Cari judul buku..."
-                            value="{{ request('search') }}"
-                            class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block rounded-md p-2 w-full sm:w-auto">
-
-                        <button type="submit"
-                            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-                            Cari
-                        </button>
+            <div style="padding: 1.5rem; background-color: #1A202C; border-bottom: 1px solid #E2E8F0;">
+                <div style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <form action="{{ route('buku.userBooks') }}" method="GET" style="display: flex; flex-direction: column; align-items: center; margin-top: 1rem; gap: 1rem;">
+                        <input type="text" name="search" placeholder="Cari judul buku..." value="{{ request('search') }}" style="border: 1px solid #CBD5E0; padding: 0.5rem; border-radius: 0.375rem; width: 100%; max-width: 300px;">
+                        <button type="submit" style="padding: 0.5rem 1rem; background-color: #3B82F6; color: white; border-radius: 0.375rem;">Cari</button>
                     </form>
                 </div>
 
-                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 1.5rem;">
                     @forelse ($buku as $item)
-                        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
-                            <img src="{{ asset('storage/' . $item->cover_path) }}" alt="{{ $item->nama_buku }} cover" class="w-full h-48 object-cover mb-4">
-                            <div class="p-4">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ $item->nama_buku }}</h3>
-                                <p class="text-gray-700 dark:text-gray-300">Penulis: {{ $item->penulis }}</p>
-                                <p class="text-gray-700 dark:text-gray-300">Tahun Rilis: {{ $item->tahun_rilis }}</p>
-                                <div class="mt-4 flex justify-between items-center">
-                                    <a href="{{ route('buku.show', $item->id) }}"
-                                        class="text-blue-500 hover:text-blue-700">Detail</a>
-                                    @if(auth()->user()->role !== 'siswa')
+                        <div style="background-color: white; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); overflow: hidden;">
+                            <img src="{{ asset('storage/' . $item->cover_path) }}" alt="{{ $item->nama_buku }} cover" style="width: 100%; height: 12rem; object-fit: cover;">
+                            <div style="padding: 1rem;">
+                                <h3 style="font-size: 1.125rem; font-weight: 600; color: #1A202C;">{{ $item->nama_buku }}</h3>
+                                <p style="color: #4A5568;">Penulis: {{ $item->penulis }}</p>
+                                <p style="color: #4A5568;">Tahun Rilis: {{ $item->tahun_rilis }}</p>
+                                <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                                    @if(auth()->user()->role === 'siswa')
+                                        <!-- Tombol untuk membuka modal Bootstrap -->
+                                        <button type="button" class="btn btn-link" style="color: #3B82F6;" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $item->id }}">Detail</button>
+                                    @else
+                                        <a href="{{ route('buku.show', $item->id) }}" style="color: #3B82F6;">Detail</a>
                                         <x-confirm-delete-modal>
                                             <x-slot name="trigger">
-                                                <button @click="isOpen = true"
-                                                    class="text-red-600 hover:text-red-900">Hapus</button>
+                                                <button class="btn btn-link" style="color: #E53E3E;">Hapus</button>
                                             </x-slot>
-
                                             <x-slot name="title">
                                                 Konfirmasi Hapus
                                             </x-slot>
-
                                             <x-slot name="content">
                                                 Apakah Anda yakin ingin menghapus buku ini?
                                             </x-slot>
-
                                             <x-slot name="footer">
-                                                <form id="deleteForm-{{ $item->id }}"
-                                                    action="{{ route('buku.destroy', $item->id) }}"
-                                                    method="POST">
+                                                <form id="deleteForm-{{ $item->id }}" action="{{ route('buku.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <x-primary-button type="submit"
-                                                        class="bg-red-600 hover:bg-red-700">
-                                                        Hapus
-                                                    </x-primary-button>
-                                                    <x-secondary-button @click="isOpen = false">
-                                                        Batal
-                                                    </x-secondary-button>
+                                                    <x-primary-button type="submit" style="background-color: #E53E3E; color: white;">Hapus</x-primary-button>
+                                                    <x-secondary-button data-bs-dismiss="modal">Batal</x-secondary-button>
                                                 </form>
                                             </x-slot>
                                         </x-confirm-delete-modal>
@@ -71,17 +55,40 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Modal Detail Buku Bootstrap -->
+                        <div class="modal fade" id="detailModal-{{ $item->id }}" tabindex="-1" aria-labelledby="detailModalLabel-{{ $item->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="detailModalLabel-{{ $item->id }}">{{ $item->nama_buku }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Penulis:</strong> {{ $item->penulis }}</p>
+                                        <p><strong>Tahun Rilis:</strong> {{ $item->tahun_rilis }}</p>
+                                        <p><strong>Deskripsi:</strong> {{ $item->deskripsi }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @empty
-                        <div class="col-span-full text-center text-gray-500">
+                        <div style="grid-column: span 5; text-align: center; color: #A0AEC0;">
                             Tidak ada data yang ditemukan.
                         </div>
                     @endforelse
                 </div>
 
-                {{-- <div class="mt-6">
+                <div style="margin-top: 1.5rem;">
                     {{ $buku->appends(request()->input())->links() }}
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>
 </x-app-layout>
+
+<!-- Tambahkan JS Bootstrap jika belum ada -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

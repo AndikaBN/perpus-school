@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/assets/watermark.css">
     <!-- Scripts -->
     <script src="/assets/app.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
         .watermark {
             background-image: url('{{ asset('storage/' . App\Models\Setting::first()->logo) }}');

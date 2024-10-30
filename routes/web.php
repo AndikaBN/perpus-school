@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-books', [BukuController::class, 'userBooks'])->name('buku.userBooks');
     // show book
     Route::get('/buku/{id}', [BukuController::class, 'show'])->name('buku.show');
+    Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
+    Route::get('/search-books', [BukuController::class, 'search'])->name('buku.search');
 
     Route::get('/peminjaman-buku', [BorrowingController::class, 'index'])->name('peminjaman-buku.index');
     Route::get('/peminjaman-buku/create', [BorrowingController::class, 'create'])->name('peminjaman-buku.create');

@@ -60,28 +60,29 @@ class BorrowingController extends Controller
         return view('borrowing.index', compact('peminjaman', 'settings', 'recommendedBooks'));
     }
 
-    public function collaborativeFiltering() {
+    public function collaborativeFiltering()
+    {
         $users = User::all();
         $buku = Buku::all();
         $settings = Setting::first();
-    
+
         $recommendedBooks = collect();
-    
+
         if (auth()->user()->peminjaman->count() > 0) {
             $borrowedBookIds = auth()->user()->peminjaman->pluck('buku_id')->unique()->toArray();
-    
+
             $recommendedBooks = Buku::whereHas('peminjaman', function ($query) use ($borrowedBookIds) {
                 $query->whereIn('buku_id', $borrowedBookIds)
-                      ->where('user_id', '!=', auth()->user()->id);
+                    ->where('user_id', '!=', auth()->user()->id);
             })
-            ->get();
+                ->get();
             // dd($recommendedBooks);
-            
+
         }
-    
+
         return view('dashboard', compact('users', 'buku', 'recommendedBooks', 'settings'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -100,33 +101,23 @@ class BorrowingController extends Controller
             })
                 ->whereNotIn('id', $borrowedBookIds)
                 ->withCount(['peminjaman'])
-                ->orderBy('peminjaman_count', 'desc') // Urutkan berdasarkan jumlah peminjaman untuk relev
+                ->orderBy('peminjaman_count', 'desc')
                 ->distinct()
                 ->pluck('id')
                 ->toArray();
         }
 
-
         return view('borrowing.create', compact('users', 'buku', 'recommendedBooks'));
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'book_id' => 'required|exists:buku,id',
             'borrow_date' => 'required|date',
             'return_date' => 'required|date|after:borrow_date',
-            // 'book_title' => 'required|string',
-            // 'author' => 'required|string',
-            // 'release_year' => 'required|string',
         ]);
-
 
         Peminjaman::create([
             'user_id' => $validatedData['user_id'],
@@ -138,9 +129,9 @@ class BorrowingController extends Controller
             'total_denda' => 0.00,
         ]);
 
-
         return redirect()->route('peminjaman-buku.index')->with('success', 'Peminjaman buku berhasil ditambahkan.');
     }
+
 
     /**
      * Display the specified resource.

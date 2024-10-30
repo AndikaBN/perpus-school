@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('returbuku', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('peminjaman_id')->constrained('peminjaman');
+            $table->foreignId('peminjaman_id')->constrained('peminjaman')->onDelete('cascade');
             $table->string('status')->nullable();;
             $table->string('deskripsi')->nullable();;
             $table->string('photo')->nullable();;
