@@ -1,86 +1,152 @@
-<title>Buku</title>
+<title>Peminjaman Buku</title>
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Daftar Buku') }}
+            {{ __('Peminjaman Buku') }}
         </h2>
     </x-slot>
 
-    <div style="padding: 1.5rem;" x-data="liveSearch()">
-        <div style="background-color: white; border-radius: 0.375rem; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">
+    <div class="py-6 px-4 sm:px-6 lg:px-6">
+        <div class="dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
             @include('alert.alert-info')
 
-            <div style="padding: 1.5rem; background-color: #1A202C; border-bottom: 1px solid #E2E8F0;">
-                <div style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <form @submit.prevent="searchBooks" style="display: flex; flex-direction: column; align-items: center; margin-top: 1rem; gap: 1rem;">
-                        <input type="text" name="search" placeholder="Cari judul buku..." x-model="search" @input="searchBooks" style="border: 1px solid #CBD5E0; padding: 0.5rem; border-radius: 0.375rem; width: 100%; max-width: 300px;">
+            <div class="p-4 sm:p-6 dark:bg-gray-900 border-b border-gray-200">
+
+
+                <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-4">
+
+                    <x-secondary-button href="{{ route('peminjaman-buku.create') }}">
+                        Tambah
+                    </x-secondary-button>
+
+                    <form action="{{ route('peminjaman-buku.index') }}" method="GET"
+                        class="flex flex-col sm:flex-row items-center mt-4 sm:mt-0 space-y-2 sm:space-y-0 sm:space-x-4">
+                        <input type="text" name="search" placeholder="Cari judul buku..."
+                            value="{{ request('search') }}"
+                            class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block rounded-md p-2 w-full sm:w-auto">
+                        <input type="text" name="name" placeholder="Cari nama peminjam..."
+                            value="{{ request('name') }}"
+                            class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block rounded-md p-2 w-full sm:w-auto">
+                        <select name="status"
+                            class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block rounded-md p-2 w-full sm:w-auto">
+                            <option value="">Semua Status</option>
+                            <option value="Dipinjam" {{ request('status') == 'Dipinjam' ? 'selected' : '' }}>
+                                Dipinjam</option>
+                            <option value="Dikembalikan" {{ request('status') == 'Dikembalikan' ? 'selected' : '' }}>
+                                Dikembalikan</option>
+                            <option value="ACC" {{ request('status') == 'ACC' ? 'selected' : '' }}>ACC</option>
+                            <option value="PENDING" {{ request('status') == 'PENDING' ? 'selected' : '' }}>
+                                PENDING</option>
+                        </select>
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            Cari
+                        </button>
                     </form>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-                    <template x-for="item in books" :key="item.id">
-                        <div style="background-color: white; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); overflow: hidden;">
-                            <img :src="'/storage/' + item.cover_path" :alt="item.nama_buku + ' cover'" style="width: 100%; height: 12rem; object-fit: cover;">
-                            <div style="padding: 1rem;">
-                                <h3 style="font-size: 1.125rem; font-weight: 600; color: #1A202C;" x-text="item.nama_buku"></h3>
-                                <p style="color: #4A5568;" x-text="'Penulis: ' + item.penulis"></p>
-                                <p style="color: #4A5568;" x-text="'Tahun Rilis: ' + item.tahun_rilis"></p>
-                                <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                                    <a :href="'/buku/' + item.id" style="color: #3B82F6;">Detail</a>
-                                    <template x-if="userRole !== 'siswa'">
-                                        <x-confirm-delete-modal>
-                                            <x-slot name="trigger">
-                                                <button @click="isOpen = true" style="color: #E53E3E;">Hapus</button>
-                                            </x-slot>
+                <div class="mt-4 overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th scope="col"
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nomor Peminjaman
+                                </th>
+                                <th scope="col"
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nama Peminjam
+                                </th>
+                                <th scope="col"
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Judul Buku
+                                </th>
+                                <th scope="col"
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Keterangan
+                                </th>
+                                <th scope="col"
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+                                <th scope="col"
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($peminjaman as $item)
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $item->no_peminjaman }}
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $item->user->nama }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $item->buku->nama_buku }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $item->deskripsi }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $item->status }}</td>
 
-                                            <x-slot name="title">
-                                                Konfirmasi Hapus
-                                            </x-slot>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 flex space-x-2">
+                                        @if (auth()->user()->role !== 'siswa')
+                                            <a href="{{ route('peminjaman-buku.edit', $item->id) }}"
+                                                class="text-indigo-600 hover:text-indigo-900">Edit</a>
 
-                                            <x-slot name="content">
-                                                Apakah Anda yakin ingin menghapus buku ini?
-                                            </x-slot>
+                                            <x-confirm-delete-modal>
+                                                <x-slot name="trigger">
+                                                    <button @click="isOpen = true"
+                                                        class="text-red-600 hover:text-red-900">Hapus</button>
+                                                </x-slot>
 
-                                            <x-slot name="footer">
-                                                <form :id="'deleteForm-' + item.id" :action="'/buku/' + item.id" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <x-primary-button type="submit" style="background-color: #E53E3E; color: white;">Hapus</x-primary-button>
-                                                    <x-secondary-button @click="isOpen = false">Batal</x-secondary-button>
-                                                </form>
-                                            </x-slot>
-                                        </x-confirm-delete-modal>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                    <div x-show="books.length === 0" style="grid-column: span 4; text-align: center; color: #A0AEC0;">
-                        Tidak ada data yang ditemukan.
-                    </div>
+                                                <x-slot name="title">
+                                                    Konfirmasi Hapus
+                                                </x-slot>
+
+                                                <x-slot name="content">
+                                                    Apakah Anda yakin ingin menghapus peminjaman ini?
+                                                </x-slot>
+
+                                                <x-slot name="footer">
+                                                    <form id="deleteForm-{{ $item->id }}"
+                                                        action="{{ route('peminjaman-buku.destroy', $item->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <x-primary-button type="submit"
+                                                            class="bg-red-600 hover:bg-red-700">
+                                                            Hapus
+                                                        </x-primary-button>
+                                                        <x-secondary-button @click="isOpen = false">
+                                                            Batal
+                                                        </x-secondary-button>
+                                                    </form>
+
+                                                </x-slot>
+                                            </x-confirm-delete-modal>
+                                        @endif
+
+                                        <a href="{{ route('peminjaman-buku.show', $item->id) }}"
+                                            class="text-gray-600 hover:text-gray-900">Detail</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500" colspan="6">
+                                        Tidak ada data yang ditemukan.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
+
+                <div class="mt-4">
+                    {{ $peminjaman->appends(request()->input())->links() }}
+                </div>
+
             </div>
         </div>
     </div>
-
-    <script>
-        function liveSearch() {
-            return {
-                search: '',
-                books: @json($buku),
-                userRole: '{{ auth()->user()->role }}',
-                searchBooks() {
-                    if (this.search.length >= 3) {
-                        fetch(`{{ route('buku.search') }}?search=${this.search}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                this.books = data;
-                            });
-                    } else {
-                        this.books = @json($buku);
-                    }
-                }
-            };
-        }
-    </script>
 </x-app-layout>

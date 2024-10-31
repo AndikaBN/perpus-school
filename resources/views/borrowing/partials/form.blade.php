@@ -11,18 +11,21 @@
 <form action="{{ route('peminjaman-buku.store') }}" method="POST">
     @csrf
 
-    <div class="mb-4">
-        <x-input-label for="user_id">{{ __('Nama Peminjam') }}</x-input-label>
-        <select id="user_id" name="user_id" class="mt-1 block w-full" required>
-            <option value="">Pilih Nama Peminjam</option>
-            @foreach ($users as $user)
-                <option value="{{ $user->id }}">{{ $user->nama }}</option>
-            @endforeach
-        </select>
-        @error('user_id')
-            <x-input-error-set :message="$message" class="mt-2" />
-        @enderror
-    </div>
+    @if (auth()->user()->role === 'admin')
+        <div class="mb-4">
+            <x-input-label for="user_id">{{ __('Nama Peminjam') }}</x-input-label>
+            <select id="user_id" name="user_id" class="mt-1 block w-full select2" required>
+                <option value="">Pilih Nama Peminjam</option>
+                @foreach ($users as $user)
+                    <option value="{{ $user->id }}">{{ $user->nama }}</option>
+                @endforeach
+            </select>
+            @error('user_id')
+                <x-input-error-set :message="$message" class="mt-2" />
+            @enderror
+        </div>
+    @endif
+
 
     <div class="mb-4">
         <x-input-label for="book_id">{{ __('Pilih Buku') }}</x-input-label>
@@ -44,7 +47,8 @@
 
     <div class="mb-4">
         <x-input-label for="borrow_date">{{ __('Tanggal Pinjam') }}</x-input-label>
-        <x-text-input id="borrow_date" class="mt-1 block w-full" type="date" name="borrow_date" value="{{ old('borrow_date') }}" required />
+        <x-text-input id="borrow_date" class="mt-1 block w-full" type="date" name="borrow_date"
+            value="{{ old('borrow_date') }}" required />
         @error('borrow_date')
             <x-input-error-set :message="$message" class="mt-2" />
         @enderror
@@ -52,7 +56,8 @@
 
     <div class="mb-4">
         <x-input-label for="return_date">{{ __('Tanggal Pengembalian') }}</x-input-label>
-        <x-text-input id="return_date" class="mt-1 block w-full" type="date" name="return_date" value="{{ old('return_date') }}" required />
+        <x-text-input id="return_date" class="mt-1 block w-full" type="date" name="return_date"
+            value="{{ old('return_date') }}" required />
         @error('return_date')
             <x-input-error-set :message="$message" class="mt-2" />
         @enderror
@@ -64,4 +69,3 @@
         </x-primary-button>
     </div>
 </form>
-

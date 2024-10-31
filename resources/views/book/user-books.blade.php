@@ -1,4 +1,3 @@
-<title>Buku</title>
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -67,7 +66,11 @@
                                     <div class="modal-body">
                                         <p><strong>Penulis:</strong> {{ $item->penulis }}</p>
                                         <p><strong>Tahun Rilis:</strong> {{ $item->tahun_rilis }}</p>
-                                        <p><strong>Deskripsi:</strong> {{ $item->deskripsi }}</p>
+                                        @if($item->ebook_path)
+                                            <a href="{{ asset('storage/' . $item->ebook_path) }}" class="btn btn-primary" target="_blank">Baca eBook</a>
+                                        @else
+                                            <p class="text-danger">eBook tidak tersedia.</p>
+                                        @endif
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -89,6 +92,3 @@
         </div>
     </div>
 </x-app-layout>
-
-<!-- Tambahkan JS Bootstrap jika belum ada -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
