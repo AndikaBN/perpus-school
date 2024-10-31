@@ -24,26 +24,24 @@
                                 </p>
                             </div>
                             <div class="px-6 pt-4 pb-2">
-                                <span
-                                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                <!-- Navigation Buttons -->
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                     <a href="{{ route('buku.userBooks') }}">Semua Buku</a>
                                 </span>
-                                <span
-                                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                     <a href="{{ route('peminjaman-buku.index') }}">Peminjaman Buku</a>
                                 </span>
-                                <span
-                                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                     <a href="{{ route('pengembalian-buku.index') }}">Pengembalian Buku</a>
                                 </span>
-                                <span
-                                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                     <a href="{{ route('profile.edit') }}">Ubah Profile</a>
                                 </span>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Recommended Books Section with Modals -->
                     @if (!empty($recommendedBooks) && $recommendedBooks->count())
                         <div class="mt-6 px-6">
                             <h3 class="text-lg font-semibold mb-4">Rekomendasi Buku Untuk Kamu:</h3>
@@ -53,6 +51,32 @@
                                         <h4 class="font-semibold">{{ $book->nama_buku }}</h4>
                                         <p class="text-sm text-gray-600">{{ $book->penulis }}</p>
                                         <p class="text-sm text-gray-600">{{ $book->tahun_rilis }}</p>
+                                        <!-- Detail Button -->
+                                        <button type="button" class="text-blue-500 underline" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $book->id }}">Detail</button>
+                                    </div>
+
+                                    <!-- Modal Detail Buku -->
+                                    <div class="modal fade" id="detailModal-{{ $book->id }}" tabindex="-1" aria-labelledby="detailModalLabel-{{ $book->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="detailModalLabel-{{ $book->id }}">{{ $book->nama_buku }}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p><strong>Penulis:</strong> {{ $book->penulis }}</p>
+                                                    <p><strong>Tahun Rilis:</strong> {{ $book->tahun_rilis }}</p>
+                                                    @if($book->ebook_path)
+                                                        <a href="{{ asset('storage/' . $book->ebook_path) }}" class="btn btn-primary" target="_blank">Baca eBook</a>
+                                                    @else
+                                                        <p class="text-danger">eBook tidak tersedia.</p>
+                                                    @endif
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
