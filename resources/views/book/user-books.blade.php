@@ -5,8 +5,8 @@
         </h2>
     </x-slot>
 
-    <div style="padding: 1.5rem;">
-        <div style="background-color: white; border-radius: 0.375rem; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">
+    <div style="padding: 1.5rem; background-color: #25324d;">
+        <div style="background-color: #1A202C; border-radius: 0.375rem; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">
             @include('alert.alert-info')
 
             <div style="padding: 1.5rem; background-color: #1A202C; border-bottom: 1px solid #E2E8F0;">
@@ -19,21 +19,21 @@
 
                 <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 1.5rem;">
                     @forelse ($buku as $item)
-                        <div style="background-color: white; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); overflow: hidden;">
+                        <div style="background-color: #2D3748; border-radius: 0.375rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); overflow: hidden;">
                             <img src="{{ asset('storage/' . $item->cover_path) }}" alt="{{ $item->nama_buku }} cover" style="width: 100%; height: 12rem; object-fit: cover;">
                             <div style="padding: 1rem;">
-                                <h3 style="font-size: 1.125rem; font-weight: 600; color: #1A202C;">{{ $item->nama_buku }}</h3>
-                                <p style="color: #4A5568;">Penulis: {{ $item->penulis }}</p>
-                                <p style="color: #4A5568;">Tahun Rilis: {{ $item->tahun_rilis }}</p>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; color: #E2E8F0;">{{ $item->nama_buku }}</h3>
+                                <p style="color: #CBD5E0;">Penulis: {{ $item->penulis }}</p>
+                                <p style="color: #CBD5E0;">Tahun Rilis: {{ $item->tahun_rilis }}</p>
                                 <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
                                     @if(auth()->user()->role === 'siswa')
                                         <!-- Tombol untuk membuka modal Bootstrap -->
-                                        <button type="button" class="btn btn-link" style="color: #3B82F6;" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $item->id }}">Detail</button>
+                                        <button type="button" class="btn btn-link" style="color: #63B3ED;" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $item->id }}">Detail</button>
                                     @else
-                                        <a href="{{ route('buku.show', $item->id) }}" style="color: #3B82F6;">Detail</a>
+                                        <a href="{{ route('buku.show', $item->id) }}" style="color: #63B3ED; text-decoration: none">Detail</a>
                                         <x-confirm-delete-modal>
                                             <x-slot name="trigger">
-                                                <button class="btn btn-link" style="color: #E53E3E;">Hapus</button>
+                                                <button class="btn btn-link" style="color: #F56565; text-decoration: none">Hapus</button>
                                             </x-slot>
                                             <x-slot name="title">
                                                 Konfirmasi Hapus
@@ -45,7 +45,7 @@
                                                 <form id="deleteForm-{{ $item->id }}" action="{{ route('buku.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <x-primary-button type="submit" style="background-color: #E53E3E; color: white;">Hapus</x-primary-button>
+                                                    <x-primary-button type="submit" style="background-color: #F56565; color: white;">Hapus</x-primary-button>
                                                     <x-secondary-button data-bs-dismiss="modal">Batal</x-secondary-button>
                                                 </form>
                                             </x-slot>
@@ -85,7 +85,7 @@
                     @endforelse
                 </div>
 
-                <div style="margin-top: 1.5rem;">
+                <div style="margin-top: 1.5rem; color: whitesmoke">
                     {{ $buku->appends(request()->input())->links() }}
                 </div>
             </div>

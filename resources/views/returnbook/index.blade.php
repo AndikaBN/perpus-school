@@ -1,157 +1,87 @@
-
 <title>Pengembalian Buku</title>
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"  style="color: #FFF;">
             {{ __('Pengembalian Buku') }}
         </h2>
     </x-slot>
 
-
-    <div class="py-6 px-4 sm:px-6 lg:px-8">
-        <div class="dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg">
+    <div style="padding: 3.5rem; background-color: #25324d;">
+        <div style="background-color: #1A202C; border-radius: 0.375rem; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">
             @include('alert.alert-info')
 
-            <div class="p-4 sm:p-6 dark:bg-gray-900 border-b border-gray-200">
-
-                <div
-                    class="mb-4 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-4">
+            <div style="padding: 1.5rem; background-color: #1A202C; border-bottom: 1px solid #E2E8F0;">
+                <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-4">
                     @if(auth()->user()->role !== 'admin')
-                    <x-secondary-button href="{{ route('pengembalian-buku.create') }}">
-                        Tambah
-                    </x-secondary-button>
+                        <a href="{{ route('pengembalian-buku.create') }}" style="display: inline-block; background-color: #4A5568; color: #63B3ED; border-radius: 0.375rem; padding: 0.5rem 1rem; text-decoration: none;">
+                            Tambah
+                        </a>
                     @endif
 
-                    <form action="{{ route('pengembalian-buku.index') }}" method="GET"
-                    class="flex flex-col sm:flex-row items-center mt-4 sm:mt-0 space-y-2 sm:space-y-0 sm:space-x-4">
-                    <input type="text" name="search" placeholder="Cari judul buku..."
-                        value="{{ request('search') }}"
-                        class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block rounded-md p-2 w-full sm:w-auto">
-                    <input type="text" name="name" placeholder="Cari nama peminjam..."
-                        value="{{ request('name') }}"
-                        class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block rounded-md p-2 w-full sm:w-auto">
-                    <select name="status"
-                        class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block rounded-md p-2 w-full sm:w-auto">
-                        <option value="">Semua Status</option>
-                        <option value="Dipinjam" {{ request('status') == 'Dipinjam' ? 'selected' : '' }}>
-                            Dipinjam</option>
-                        <option value="Dikembalikan" {{ request('status') == 'Dikembalikan' ? 'selected' : '' }}>
-                            Dikembalikan</option>
-                        <option value="ACC" {{ request('status') == 'ACC' ? 'selected' : '' }}>ACC</option>
-                        <option value="PENDING" {{ request('status') == 'PENDING' ? 'selected' : '' }}>
-                            PENDING</option>
-                    </select>
-                    <button type="submit"
-                        class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-                        Cari
-                    </button>
-                </form>
-
+                    <form action="{{ route('pengembalian-buku.index') }}" method="GET" class="flex flex-col sm:flex-row items-center mt-4 sm:mt-0 space-y-2 sm:space-y-0 sm:space-x-4">
+                        <input type="text" name="search" placeholder="Cari judul buku..." value="{{ request('search') }}"
+                            style="background-color: #2D3748; color: #E2E8F0; border: 1px solid #4A5568; border-radius: 0.375rem; padding: 0.5rem;">
+                        <input type="text" name="name" placeholder="Cari nama peminjam..." value="{{ request('name') }}"
+                            style="background-color: #2D3748; color: #E2E8F0; border: 1px solid #4A5568; border-radius: 0.375rem; padding: 0.5rem;">
+                        <select name="status" style="background-color: #2D3748; color: #E2E8F0; border: 1px solid #4A5568; border-radius: 0.375rem; padding: 0.5rem;">
+                            <option value="">Semua Status</option>
+                            <option value="Dipinjam" {{ request('status') == 'Dipinjam' ? 'selected' : '' }}>Dipinjam</option>
+                            <option value="Dikembalikan" {{ request('status') == 'Dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
+                            <option value="ACC" {{ request('status') == 'ACC' ? 'selected' : '' }}>ACC</option>
+                            <option value="PENDING" {{ request('status') == 'PENDING' ? 'selected' : '' }}>PENDING</option>
+                        </select>
+                        <button type="submit" style="background-color: #4A5568; color: #63B3ED; padding: 0.5rem 1rem; border-radius: 0.375rem;">
+                            Cari
+                        </button>
+                    </form>
                 </div>
 
                 <div class="mt-4 overflow-x-auto">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead>
-                                <tr>
-                                    <th scope="col"
-                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nomor Peminjaman
-                                    </th>
-                                    <th scope="col"
-                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nama Peminjam
-                                    </th>
-                                    <th scope="col"
-                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Judul Buku
-                                    </th>
-                                    <th scope="col"
-                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Keterangan
-                                    </th>
-                                    <th scope="col"
-                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th scope="col"
-                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Aksi
-                                    </th>
+                    <table style="width: 100%; background-color: #1A202C; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="padding: 0.75rem; text-align: left; color: #E2E8F0; border-bottom: 1px solid #4A5568;">Nomor Peminjaman</th>
+                                <th style="padding: 0.75rem; text-align: left; color: #E2E8F0; border-bottom: 1px solid #4A5568;">Nama Peminjam</th>
+                                <th style="padding: 0.75rem; text-align: left; color: #E2E8F0; border-bottom: 1px solid #4A5568;">Judul Buku</th>
+                                <th style="padding: 0.75rem; text-align: left; color: #E2E8F0; border-bottom: 1px solid #4A5568;">Keterangan</th>
+                                <th style="padding: 0.75rem; text-align: left; color: #E2E8F0; border-bottom: 1px solid #4A5568;">Status</th>
+                                <th style="padding: 0.75rem; text-align: left; color: #E2E8F0; border-bottom: 1px solid #4A5568;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($pengembalian as $item)
+                                <tr style="background-color: #2D3748;">
+                                    <td style="padding: 0.75rem; color: #E2E8F0;">{{ $item->peminjaman->no_peminjaman }}</td>
+                                    <td style="padding: 0.75rem; color: #E2E8F0;">{{ $item->peminjaman->user->nama }}</td>
+                                    <td style="padding: 0.75rem; color: #E2E8F0;">{{ $item->peminjaman->buku->nama_buku }}</td>
+                                    <td style="padding: 0.75rem; color: #E2E8F0;">{{ $item->deskripsi }}</td>
+                                    <td style="padding: 0.75rem; color: #E2E8F0;">{{ $item->status }}</td>
+                                    <td style="padding: 0.75rem; color: #E2E8F0;">
+                                        @if(auth()->user()->role !== 'siswa')
+                                            <a href="{{ route('pengembalian-buku.edit', $item->id) }}" style="color: #63B3ED; text-decoration: none;">Edit</a>
+                                            <button onclick="if(confirm('Apakah Anda yakin ingin menghapus pengembalian ini?')) document.getElementById('deleteForm-{{ $item->id }}').submit();" style="color: #E53E3E; background-color: transparent; border: none; cursor: pointer;">
+                                                Hapus
+                                            </button>
+                                            <form id="deleteForm-{{ $item->id }}" action="{{ route('pengembalian-buku.destroy', $item->id) }}" method="POST" style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        @endif
+                                        <a href="{{ route('pengembalian-buku.show', $item->id) }}" style="color: #63B3ED; text-decoration: none;">Detail</a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @forelse ($pengembalian as $item)
-                                    <tr>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $item->peminjaman->no_peminjaman }}
-                                        </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $item->peminjaman->user->nama }}</td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $item->peminjaman->buku->nama_buku }}</td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $item->deskripsi }}</td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $item->status }}</td>
-
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 flex space-x-2">
-                                            @if(auth()->user()->role !== 'siswa')
-                                            <a href="{{ route('pengembalian-buku.edit', $item->id) }}"
-                                                class="text-indigo-600 hover:text-indigo-900">Edit</a>
-
-                                            <x-confirm-delete-modal>
-                                                <x-slot name="trigger">
-                                                    <button @click="isOpen = true"
-                                                        class="text-red-600 hover:text-red-900">Hapus</button>
-                                                </x-slot>
-
-                                                <x-slot name="title">
-                                                    Konfirmasi Hapus
-                                                </x-slot>
-
-                                                <x-slot name="content">
-                                                    Apakah Anda yakin ingin menghapus pengembalian ini?
-                                                </x-slot>
-
-                                                <x-slot name="footer">
-                                                    <form id="deleteForm-{{ $item->id }}"
-                                                        action="{{ route('pengembalian-buku.destroy', $item->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <x-primary-button type="submit"
-                                                            class="bg-red-600 hover:bg-red-700">
-                                                            Hapus
-                                                        </x-primary-button>
-                                                        <x-secondary-button @click="isOpen = false">
-                                                            Batal
-                                                        </x-secondary-button>
-                                                    </form>
-
-                                                </x-slot>
-                                            </x-confirm-delete-modal>
-                                            @endif
-                                            <a href="{{ route('pengembalian-buku.show', $item->id) }}"
-                                                class="text-gray-600 hover:text-gray-900">Detail</a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500" colspan="6">
-                                            Tidak ada data yang ditemukan.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                            @empty
+                                <tr>
+                                    <td colspan="6" style="padding: 0.75rem; text-align: center; color: #CBD5E0;">Tidak ada data yang ditemukan.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-                <div class="mt-4">
+
+                <div class="mt-4" style="color: #CBD5E0;">
                     {{ $pengembalian->appends(request()->input())->links() }}
                 </div>
-
-
-
             </div>
         </div>
     </div>

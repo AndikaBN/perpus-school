@@ -20,7 +20,7 @@
                 <a href="/" class="flex items-center">
                     <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
                 </a>
-                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                <div class="flex items-center space-x-4 mt-4 md:mt-0" style="padding: 0 20px">
                     @auth
                         <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900">Dashboard</a>
                     @else

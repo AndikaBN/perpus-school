@@ -2,16 +2,16 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-200 leading-tight">
             {{ __('Settings') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div style="padding: 3.5rem; background-color: #25324d;">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             @include('alert.alert-info')
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+            <div style="background-color: #1A202C; border-radius: 0.375rem; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">
+                <div class="p-6" style="background-color: #1A202C; border-bottom: 1px solid #4A5568;">
                     @include('settings.partials.form')
                 </div>
             </div>
